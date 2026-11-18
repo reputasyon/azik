@@ -43,6 +43,7 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter build web --dart-define-from-file=config/release.json --base-href /azik/
+      - run: python scripts/version_web.py
       - run: cp build/content/catalog.json build/web/catalog.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
