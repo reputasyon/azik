@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "id": "temel",
+  "version": 1,
+  "guides": [
+    {
+      "id": "aile-plani",
+      "title": "Aile iletişim planı",
+      "category": "İletişim",
+      "summary": "Herkesin bildiği basit bir plan hazırlamakla başla.",
+      "body": "Birlikte planla\nEvdeki kişilerle, birbirinize ulaşamadığınızda nasıl haberleşeceğinizi konuşun. Herkesin erişebileceği bir iletişim listesi oluşturun.\n\nİki seçenek belirle\nYakında ve mahallenin dışında buluşma seçeneklerini birlikte değerlendirin. Çocukların, yaşlıların ve erişilebilirlik ihtiyacı olan kişilerin koşullarını plana ekleyin.\n\nKâğıda geçir\nPlanın bir kopyasını çantanda, bir kopyasını evde erişilebilir bir yerde tut. Özel bilgileri açık kaynak projeye veya herkese açık dosyalara ekleme.\n\nBirlikte gözden geçir\nTelefon numaraları veya ev düzeni değişince planı güncelle. Bu çalışma sayfası, yerel yetkililerin güncel yönlendirmelerinin yerine geçmez.",
+      "updated": "2026-11-18",
+      "source": "Azık projesi — özgün genel hazırlık notu; uzman incelemesi bekliyor",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "canta-kontrolu",
+      "title": "Çantanı tanı, eksikleri gör",
+      "category": "Hazırlık",
+      "summary": "Hazır bir listeyi kopyalamadan önce kendi ihtiyaçlarını belirle.",
+      "body": "İhtiyaçlarını yaz\nEvdeki kişi sayısını, yaşları, özel ihtiyaçları ve evcil hayvanları düşün. Kullanılan ekipmanları herkesin bulabileceği şekilde düzenle.\n\nBir envanter çıkar\nÇantandaki malzemeleri, miktarlarını ve kontrol tarihlerini yaz. Ambalajı hasarlı veya kullanım tarihi geçmiş ürünleri ayır.\n\nUlaşılabilir bir yer seç\nÇantanın yerini evdekilerle paylaş. Taşıma ağırlığını ve erişilebilirliği birlikte değerlendir.\n\nKontrolü tekrarla\nMevsim değişikliklerinde ve aile ihtiyaçları değiştiğinde listeyi yeniden gözden geçir. Bu rehber kapsamlı bir afet çantası standardı değildir; güncel resmî hazırlık listeleriyle tamamlanmalıdır.",
+      "updated": "2026-11-18",
+      "source": "Azık projesi — özgün genel hazırlık notu; uzman incelemesi bekliyor",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "kagit-iletisim",
+      "title": "Telefonun dışında bir kopya",
+      "category": "İletişim",
+      "summary": "Önemli iletişim bilgilerini yalnızca telefonuna bırakma.",
+      "body": "Bir iletişim kartı hazırla\nYakınlarının adlarını ve telefon numaralarını okunaklı biçimde yaz. Numaraları ilgili kişilerle doğrula.\n\nGereksiz bilgileri azalt\nKart üzerinde ihtiyaç olmayan kimlik, parola veya finansal bilgileri tutma.\n\nKopyaları yerleştir\nKüçük bir kopyayı cüzdanında ya da çantanda taşı. Evdeki kişilerin de kendi kopyaları olsun.\n\nGüncel tut\nBir numara değiştiğinde basılı kopyaları da yenile.",
+      "updated": "2026-11-18",
+      "source": "Azık projesi — özgün genel hazırlık notu; uzman incelemesi bekliyor",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "enerji-hazirligi",
+      "title": "Şarj planını önceden yap",
+      "category": "Enerji",
+      "summary": "Cihazlarını ve şarj ekipmanını birlikte kontrol et.",
+      "body": "Uyumluluğu kontrol et\nTelefonun, taşınabilir şarj cihazın ve kablolarının birlikte çalıştığını önceden dene. Üreticinin kullanım ve saklama talimatlarını izle.\n\nBir düzen oluştur\nKabloları kolay bulunabilecek bir yerde tut. Evde hangi cihazın hangi kabloyu kullandığını not al.\n\nBakım tarihini belirle\nŞarj ekipmanını düzenli kontrol etmek için takvimine bir hatırlatma ekle. Hasarlı ekipmanı kullanıma hazır malzemelerden ayır.\n\nBilgiyi önceden indir\nİhtiyaç duyabileceğin belgeleri ve rehberleri bağlantın varken cihazına kaydet.",
+      "updated": "2026-11-18",
+      "source": "Azık projesi — özgün genel hazırlık notu; uzman incelemesi bekliyor",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "cevrimdisi-deneme",
+      "title": "İnternetsiz kullanım provası",
+      "category": "Dijital hazırlık",
+      "summary": "Bir rehberi gerçekten çevrimdışı açabildiğinden emin ol.",
+      "body": "Önce indir\nAzık içindeki temel rehberleri aç. Kullanmak istediğin diğer uygulamalarda da indirmelerin tamamlandığını kontrol et.\n\nBağlantıyı kapat\nGüvenli ve uygun bir zamanda internet bağlantını kapatıp rehberleri tekrar açmayı dene. Bu denemeyi iletişime ihtiyaç duyduğun bir anda yapma.\n\nEksikleri not et\nAçılmayan dosyaları ve bağlantıya ihtiyaç duyan özellikleri listele. İnternet geri geldiğinde indirmeleri tamamla.\n\nWeb ile uygulama farkını bil\nTarayıcı depolaması temizlenebilir ve web sayfası yeniden açılırken bağlantı gerekebilir. Kalıcı çevrimdışı kullanım için kurulan cihaz uygulamasını esas al.",
+      "updated": "2026-11-18",
+      "source": "Azık projesi — özgün genel hazırlık notu; uzman incelemesi bekliyor",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "bilgi-duzeni",
+      "title": "Belgelerine bir düzen ver",
+      "category": "Dijital hazırlık",
+      "summary": "Aradığın bilgiye hızlı ulaşmak için küçük bir arşiv oluştur.",
+      "body": "Kategorilere ayır\nRehberleri ve kişisel belgeleri anlaşılır başlıklarla düzenle. Hassas belgeleri herkese açık alanlarda paylaşma.\n\nTarih ekle\nBelgelerin hangi tarihte hazırlandığını veya kontrol edildiğini not et. Eski kopyaları güncel olanlarla karıştırma.\n\nKaynağı sakla\nBir bilginin nereden geldiğini ve tekrar nereden doğrulanabileceğini kaydet.\n\nErişimi dene\nGereken dosyaları arama ve açma denemesi yap. Kişisel belgelerinin yedeklerini kendi gizlilik ihtiyaçlarına uygun biçimde yönet.",
+      "updated": "2026-11-18",
+      "source": "Azık projesi — özgün genel hazırlık notu; uzman incelemesi bekliyor",
+      "license": "CC-BY-4.0"
+    }
+  ]
+}

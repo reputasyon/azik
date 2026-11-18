@@ -1,0 +1,44 @@
+name: Publish content
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: content-publication
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: github-pages
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r scripts/requirements.txt
+      - name: Build and sign
+        env:
+          AZIK_SIGNING_KEY: ${{ secrets.AZIK_SIGNING_KEY }}
+        run: |
+          python scripts/publish_content.py --repository "$GITHUB_REPOSITORY"
+          echo "TAG=content-v$(python -c 'import json; print(json.load(open("assets/content/temel.json"))["version"])')" >> "$GITHUB_ENV"
+      - name: Publish immutable content release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$TAG" build/content/temel.json --target "$GITHUB_SHA" --title "Temel kütüphane $TAG" --notes "İmzalı Türkçe içerik paketi. Katalog GitHub Pages üzerinden dağıtılır."
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.8'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter build web --dart-define-from-file=config/release.json --base-href /azik/
+      - run: cp build/content/catalog.json build/web/catalog.json
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+      - uses: actions/deploy-pages@v4
