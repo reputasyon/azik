@@ -12,7 +12,6 @@ jobs:
   publish:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: github-pages
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,7 +27,15 @@ jobs:
       - name: Publish immutable content release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$TAG" build/content/temel.json --target "$GITHUB_SHA" --title "Temel kütüphane $TAG" --notes "İmzalı Türkçe içerik paketi. Katalog GitHub Pages üzerinden dağıtılır."
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            mkdir -p build/existing
+            gh release download "$TAG" --pattern temel.json --dir build/existing
+            cmp build/content/temel.json build/existing/temel.json
+            echo "Identical immutable release exists; continuing Pages publication."
+          else
+            gh release create "$TAG" build/content/temel.json --target "$GITHUB_SHA" --title "Temel kütüphane $TAG" --notes "İmzalı Türkçe içerik paketi. Katalog GitHub Pages üzerinden dağıtılır."
+          fi
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.47.8'
@@ -41,4 +48,22 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
+  deploy:
+    needs: publish
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Wait for artifact metadata visibility
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for attempt in $(seq 1 12); do
+            count=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" --jq '[.artifacts[] | select(.name == "github-pages")] | length')
+            if [ "$count" -gt 0 ]; then exit 0; fi
+            sleep 5
+          done
+          exit 1
       - uses: actions/deploy-pages@v4
+        id: deployment

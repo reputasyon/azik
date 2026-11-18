@@ -15,11 +15,11 @@ Bu repoda yayın kanalı yapılandırması kurulmuşsa adımları tekrarlayıp a
 - `assets/content/temel.json` dosyasını değiştirin. Her rehberin kaynak, lisans ve tarih alanlarını koruyun; uzman onayı yoksa varmış gibi belirtmeyin.
 - `version` sayısını artırın. Aynı içerik sürümünü yeniden kullanmayın.
 - PR kontrolü sonrası `main` dalına alın ve `Publish content` çalıştırın.
-- İş akışı, değiştirilemez isimli `content-vN` sürümüne `temel.json` ekler. Var olan tag üzerinde tekrar yayınlamayı reddeder.
+- İş akışı, değiştirilemez isimli `content-vN` sürümüne `temel.json` ekler. Aynı tag varsa dosyanın birebir eşitliğini doğrular; farklı içerikle üzerine yazmayı reddeder.
 - Pages `catalog.json`, tam payload baytlarının Ed25519 imzasını taşır. Uygulama yalnızca kendisine gömülü public key ile doğrular.
 - Paket şeması ve `minAppBuild` uyumsuzsa yeni uygulama sürümü gerekir. Şu an desteklenen build 1'dir.
 
-Release başarılı, Pages yayını başarısız olursa mevcut release asset'ini değiştirmeyin. Aynı commit/key ile kataloğu tekrar üretip yalnızca Pages'i yeniden yayınlayın veya yeni içerik sürümüyle normal yayın akışını kullanın. Eski, çalışan katalog yerinde kalır.
+Release başarılı, Pages yayını başarısız olursa mevcut release asset'ini değiştirmeyin. Aynı kaynak içerikle iş akışını yeniden çalıştırın; mevcut release dosyası birebir eşitse yalnızca Pages yayını devam eder. Eski, çalışan katalog yerinde kalır.
 
 ## Uygulama dağıtımı
 
