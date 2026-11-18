@@ -90,7 +90,7 @@ class UpdateService {
     if (j['schema'] != 1 ||
         j['id'] != 'temel' ||
         j['minAppBuild'] is! int ||
-        j['minAppBuild'] > 1) {
+        j['minAppBuild'] > 2) {
       throw const UpdateFailure(
         'Bu içerik için uygulamanın yeni sürümü gerekiyor.',
       );

@@ -8,10 +8,12 @@ import 'data/store.dart';
 import 'data/store_base.dart';
 import 'services/updates.dart';
 
-const ink = Color(0xff203b30);
-const paper = Color(0xfff7f5ee);
-const muted = Color(0xff687369);
-const line = Color(0xffdedfd4);
+const ink = Color(0xffe6e6e8);
+const accent = Color(0xff2680ff);
+const panel = Color(0xff27282d);
+const paper = Color(0xff1e1e1e);
+const muted = Color(0xff9a9a9f);
+const line = Color(0xff39393f);
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,17 +29,24 @@ class AzikApp extends StatelessWidget {
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
       useMaterial3: true,
+      brightness: Brightness.dark,
+      navigationBarTheme: const NavigationBarThemeData(
+        backgroundColor: panel,
+        indicatorColor: Color(0xff254a80),
+      ),
       scaffoldBackgroundColor: paper,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: ink,
-        primary: ink,
+        seedColor: accent,
+        primary: accent,
+        brightness: Brightness.dark,
         surface: paper,
       ),
       fontFamily: 'Arial',
+      visualDensity: VisualDensity.compact,
       dividerColor: line,
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: panel,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(color: line),
@@ -351,7 +360,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         ),
       );
     }
-    final wide = MediaQuery.sizeOf(context).width >= 900;
+    final wide = MediaQuery.sizeOf(context).width >= 760;
     return Scaffold(
       body: SafeArea(
         child: Row(
@@ -364,7 +373,12 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       key: ValueKey(page),
-                      padding: EdgeInsets.all(wide ? 40 : 20),
+                      padding: EdgeInsets.fromLTRB(
+                        wide ? 40 : 20,
+                        26,
+                        wide ? 40 : 20,
+                        30,
+                      ),
                       child: Align(
                         alignment: Alignment.topCenter,
                         child: ConstrainedBox(
@@ -414,146 +428,52 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
-  Widget brand() => Row(
+  Widget brand() => const Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Container(
-        padding: const EdgeInsets.all(9),
-        decoration: BoxDecoration(
-          color: ink,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Icon(
-          Icons.spa_outlined,
-          color: Color(0xffe4eab9),
-          size: 25,
-        ),
-      ),
-      const SizedBox(width: 10),
-      const Text(
-        'azık',
-        style: TextStyle(
-          fontSize: 36,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -2,
-          color: ink,
-        ),
+      Icon(Icons.menu_book_rounded, size: 21, color: accent),
+      SizedBox(width: 9),
+      Text(
+        'Azık',
+        style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: ink),
       ),
     ],
   );
+
   Widget sidebar() => Container(
-    width: 238,
-    decoration: const BoxDecoration(
-      border: Border(right: BorderSide(color: line)),
+    width: 230,
+    margin: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+    decoration: BoxDecoration(
+      color: const Color(0xff25272e),
+      borderRadius: BorderRadius.circular(13),
+      border: Border.all(color: line),
     ),
-    padding: const EdgeInsets.all(24),
+    padding: const EdgeInsets.fromLTRB(10, 20, 10, 16),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        brand(),
-        const SizedBox(height: 7),
-        const Text(
-          'BİLGİ YANINDA.',
-          style: TextStyle(fontSize: 10, letterSpacing: 3, color: muted),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 11),
+          child: brand(),
         ),
-        const SizedBox(height: 52),
-        for (final (i, icon, label) in [
-          (0, Icons.menu_book_outlined, 'Kütüphane'),
-          (1, Icons.checklist_rounded, 'Hazırlığım'),
-          (2, Icons.bookmark_border, 'Kaydedilenler'),
-          (3, Icons.downloading_outlined, 'Paketler & güncelleme'),
-        ])
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Material(
-              color: page == i ? const Color(0xffe6e9dc) : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-              child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                leading: Icon(icon, color: ink, size: 21),
-                title: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: ink,
-                    fontWeight: page == i ? FontWeight.w700 : FontWeight.w400,
-                  ),
-                ),
-                onTap: () => setState(() {
-                  page = i;
-                }),
-              ),
-            ),
-          ),
+        const SizedBox(height: 24),
+        navItem(0, Icons.menu_book_outlined, 'Kütüphane'),
+        navItem(2, Icons.bookmark_border, 'Kaydedilenler'),
+        navItem(1, Icons.checklist_rounded, 'Hazırlığım'),
         const Spacer(),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color(0xffeeeee2),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.offline_pin_outlined, size: 23, color: ink),
-              const SizedBox(height: 10),
-              const Text(
-                'İnternetsiz de yanında.',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                  color: ink,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                kIsWeb
-                    ? 'Web önizlemesi. Kalıcı çevrimdışı kullanım için cihaz uygulaması.'
-                    : 'İndirdiğin rehberler bu cihazda saklanır.',
-                style: const TextStyle(fontSize: 12, height: 1.5, color: muted),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 22),
-        const Text(
-          'AÇIK KAYNAK  /  v0.1.0',
-          style: TextStyle(fontSize: 10, letterSpacing: 1, color: muted),
-        ),
-      ],
-    ),
-  );
-  Widget header(bool wide) => Container(
-    padding: EdgeInsets.symmetric(horizontal: wide ? 40 : 20, vertical: 17),
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(color: line)),
-    ),
-    child: Row(
-      children: [
-        if (!wide)
-          brand()
-        else
-          const Text(
-            'AZIK  /  TÜRKÇE YAŞAM KÜTÜPHANESİ',
-            style: TextStyle(fontSize: 11, letterSpacing: 1.7, color: muted),
-          ),
-        const Spacer(),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-          decoration: BoxDecoration(
-            color: const Color(0xffe8eddf),
-            borderRadius: BorderRadius.circular(30),
-          ),
+        navItem(3, Icons.tune_rounded, 'Paketler ve güncellemeler'),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 18, 8, 4),
           child: Row(
             children: [
-              const Icon(Icons.check_circle, size: 14, color: ink),
-              const SizedBox(width: 6),
-              Text(
-                '${guides.length} rehber cihazında',
-                style: const TextStyle(fontSize: 11, color: ink),
+              const Icon(Icons.offline_pin_outlined, size: 16, color: accent),
+              const SizedBox(width: 10),
+              const SizedBox(width: 0),
+              Expanded(
+                child: Text(
+                  kIsWeb ? 'Web önizlemesi' : 'Çevrimdışı hazır',
+                  style: const TextStyle(fontSize: 12, color: muted),
+                ),
               ),
             ],
           ),
@@ -561,37 +481,95 @@ class _LibraryScreenState extends State<LibraryScreen> {
       ],
     ),
   );
+
+  Widget navItem(int i, IconData icon, String title) => Padding(
+    padding: const EdgeInsets.only(bottom: 3),
+    child: Material(
+      color: page == i ? accent : Colors.transparent,
+      borderRadius: BorderRadius.circular(7),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(7),
+        onTap: () => setState(() {
+          page = i;
+        }),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 10),
+          child: Row(
+            children: [
+              Icon(icon, size: 19, color: page == i ? Colors.white : accent),
+              const SizedBox(width: 11),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: page == i ? Colors.white : ink,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+
+  Widget header(bool wide) => SizedBox(
+    height: 48,
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: wide ? 26 : 20),
+      child: Row(
+        children: [
+          if (!wide)
+            brand()
+          else ...[
+            const Icon(Icons.folder_open_outlined, size: 16, color: muted),
+            const SizedBox(width: 9),
+            const Text('Azık', style: TextStyle(color: muted, fontSize: 12)),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text('/', style: TextStyle(color: line)),
+            ),
+            Text(switch (page) {
+              1 => 'Hazırlığım',
+              2 => 'Kaydedilenler',
+              3 => 'Paketler',
+              _ => 'Kütüphane',
+            }, style: const TextStyle(fontSize: 12, color: muted)),
+          ],
+          const Spacer(),
+          const Icon(Icons.check_circle_outline, size: 14, color: muted),
+          const SizedBox(width: 7),
+          Text(
+            '${guides.length} rehber cihazında',
+            style: const TextStyle(fontSize: 11, color: muted),
+          ),
+        ],
+      ),
+    ),
+  );
+
   Widget heading(String eyebrow, String title, String subtitle) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        eyebrow,
-        style: const TextStyle(
-          fontSize: 11,
-          letterSpacing: 2,
-          color: muted,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      const SizedBox(height: 12),
-      Text(
         title,
         style: const TextStyle(
-          fontSize: 35,
+          fontSize: 30,
           fontWeight: FontWeight.w700,
-          letterSpacing: -1.3,
+          letterSpacing: -0.8,
           color: ink,
-          height: 1.15,
         ),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: 10),
       Text(
         subtitle,
-        style: const TextStyle(fontSize: 15, height: 1.6, color: muted),
+        style: const TextStyle(fontSize: 15, height: 1.5, color: muted),
       ),
-      const SizedBox(height: 26),
+      const SizedBox(height: 22),
     ],
   );
+
   Widget library({bool savedOnly = false}) {
     final filtered = guides
         .where(
@@ -601,111 +579,54 @@ class _LibraryScreenState extends State<LibraryScreen> {
               g.matches(query),
         )
         .toList();
+    final grouped = query.trim().isEmpty && category == 'Tümü' && !savedOnly;
+    final primary = filtered
+        .where((g) => g.category != 'Dijital hazırlık')
+        .toList();
+    final digital = filtered
+        .where((g) => g.category == 'Dijital hazırlık')
+        .toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!savedOnly)
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(28),
-            margin: const EdgeInsets.only(bottom: 30),
-            decoration: BoxDecoration(
-              color: ink,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Stack(
-              children: [
-                const Positioned(
-                  right: -5,
-                  bottom: -15,
-                  child: Icon(
-                    Icons.landscape_outlined,
-                    color: Color(0xff385244),
-                    size: 160,
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'BUGÜNDEN HAZIRLAN.',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Color(0xffd4dfa3),
-                        letterSpacing: 2.5,
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    const Text(
-                      'Bağlantı kesilir.\nBilgi yanında kalır.',
-                      style: TextStyle(
-                        fontSize: 36,
-                        color: paper,
-                        fontWeight: FontWeight.w600,
-                        height: 1.15,
-                        letterSpacing: -1,
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      'Hazırlanmak, küçük bir adımla başlar.\nTürkçe rehberlerini keşfet, kendi planını oluştur.',
-                      style: TextStyle(
-                        color: Color(0xffc2cec1),
-                        height: 1.7,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 22),
-                    FilledButton.icon(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xffdce6ae),
-                        foregroundColor: ink,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 17,
-                        ),
-                      ),
-                      onPressed: () => setState(() {
-                        page = 1;
-                      }),
-                      icon: const Icon(Icons.arrow_forward, size: 18),
-                      label: const Text('Hazırlık listeme git'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
         heading(
-          savedOnly ? 'KİŞİSEL KÜTÜPHANEN' : 'KEŞFET & ÖĞREN',
-          savedOnly ? 'Elinin altında.' : 'Bir bilgi, bir adım.',
+          '',
+          savedOnly ? 'Kaydedilenler' : 'Kütüphane',
           savedOnly
-              ? 'Kaydettiğin rehberlere buradan ulaş.'
-              : 'Temel hazırlık rehberleri. Okumak için bağlantı gerekmez.',
+              ? 'Daha sonra okumak için ayırdığın rehberler.'
+              : 'Hazırlık, iletişim ve günlük yaşam için Türkçe rehberler.',
         ),
-        TextField(
-          controller: search,
-          onChanged: (v) => setState(() {
-            query = v;
-          }),
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.search),
-            hintText: 'Rehberlerde ara…',
-            suffixIcon: query.isEmpty
-                ? null
-                : IconButton(
-                    tooltip: 'Aramayı temizle',
-                    onPressed: () {
-                      search.clear();
-                      setState(() {
-                        query = '';
-                      });
-                    },
-                    icon: const Icon(Icons.close),
-                  ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
+          child: TextField(
+            controller: search,
+            onChanged: (v) => setState(() {
+              query = v;
+            }),
+            style: const TextStyle(fontSize: 15),
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search, color: muted, size: 22),
+              hintText: 'Kütüphanede ara',
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 19,
+              ),
+              suffixIcon: query.isEmpty
+                  ? null
+                  : IconButton(
+                      tooltip: 'Aramayı temizle',
+                      onPressed: () {
+                        search.clear();
+                        setState(() {
+                          query = '';
+                        });
+                      },
+                      icon: const Icon(Icons.close, size: 18),
+                    ),
+            ),
           ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 12),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -718,135 +639,268 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 onSelected: (_) => setState(() {
                   category = c;
                 }),
-                selectedColor: const Color(0xffe3e9d3),
-                labelStyle: const TextStyle(fontSize: 12, color: ink),
-                side: const BorderSide(color: line),
+                selectedColor: const Color(0xff263e5d),
+                backgroundColor: paper,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  color: category == c ? const Color(0xff80b7ff) : muted,
+                ),
+                shape: const StadiumBorder(),
+                side: BorderSide(
+                  color: category == c ? const Color(0xff3b608b) : line,
+                ),
               ),
           ],
         ),
-        const SizedBox(height: 22),
-        Text(
-          '${filtered.length} REHBER',
-          style: const TextStyle(fontSize: 10, letterSpacing: 2, color: muted),
-        ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 32),
         if (filtered.isEmpty)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 35),
-            child: Text(
-              'Burada henüz bir rehber yok. Aramayı veya kategori filtresini değiştirebilirsin.',
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              border: Border.all(color: line),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Text(
+              'Rehber bulunamadı. Aramayı veya kategori filtresini değiştirebilirsin.',
               style: TextStyle(color: muted),
             ),
           ),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final columns = constraints.maxWidth > 680 ? 2 : 1;
-            return Wrap(
-              spacing: 16,
-              runSpacing: 16,
-              children: [
-                for (final g in filtered)
-                  SizedBox(
-                    width:
-                        (constraints.maxWidth - (columns - 1) * 16) / columns,
-                    child: guideCard(g),
-                  ),
-              ],
-            );
-          },
-        ),
-        const SizedBox(height: 26),
+        if (grouped) ...[
+          sectionTitle(
+            'Başlangıç rehberleri',
+            'Planını oluştur, ihtiyaçlarını gözden geçir.',
+            primary.length,
+          ),
+          guideGrid(primary),
+          const SizedBox(height: 32),
+          sectionTitle(
+            'Dijital hazırlık',
+            'Belgelerin ve bilgilerin bağlantı olmadan da yanında olsun.',
+            digital.length,
+          ),
+          guideGrid(digital),
+        ] else if (filtered.isNotEmpty) ...[
+          sectionTitle(
+            savedOnly ? 'Kaydettiğin rehberler' : 'Arama sonuçları',
+            '',
+            filtered.length,
+          ),
+          guideGrid(filtered),
+        ],
+        const SizedBox(height: 30),
+        const Divider(),
+        const SizedBox(height: 10),
         const Text(
-          'İlk sürüm · Bu kütüphane genel hazırlık içerikleriyle başlıyor. Harita, video ve yerel yapay zekâ sonraki aşamalarda.',
-          style: TextStyle(fontSize: 12, height: 1.6, color: muted),
+          'Temel kütüphane · Genel hazırlık notları · Uzman incelemesi bekliyor',
+          style: TextStyle(fontSize: 11, color: muted),
         ),
       ],
     );
   }
 
+  Widget sectionTitle(String title, String subtitle, int count) => Padding(
+    padding: const EdgeInsets.only(bottom: 15),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: ink,
+                ),
+              ),
+              if (subtitle.isNotEmpty) ...[
+                const SizedBox(height: 5),
+                Text(
+                  subtitle,
+                  style: const TextStyle(color: muted, fontSize: 13),
+                ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          '$count rehber',
+          style: const TextStyle(color: accent, fontSize: 12),
+        ),
+      ],
+    ),
+  );
+
+  Widget guideGrid(List<Guide> items) => LayoutBuilder(
+    builder: (context, constraints) {
+      final columns = constraints.maxWidth >= 1000
+          ? 4
+          : constraints.maxWidth >= 690
+          ? 3
+          : constraints.maxWidth >= 460
+          ? 2
+          : 1;
+      return Wrap(
+        spacing: 16,
+        runSpacing: 22,
+        children: [
+          for (final g in items)
+            SizedBox(
+              width: (constraints.maxWidth - (columns - 1) * 16) / columns,
+              child: guideCard(g),
+            ),
+        ],
+      );
+    },
+  );
+
   IconData categoryIcon(String c) => switch (c) {
     'İletişim' => Icons.forum_outlined,
     'Enerji' => Icons.battery_charging_full,
-    'Dijital hazırlık' => Icons.offline_bolt_outlined,
+    'Dijital hazırlık' => Icons.folder_copy_outlined,
     _ => Icons.backpack_outlined,
   };
-  Widget guideCard(Guide g) => Material(
-    color: const Color(0xfffffef9),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16),
-      side: const BorderSide(color: line),
-    ),
-    clipBehavior: Clip.antiAlias,
-    child: InkWell(
-      onTap: () => showGuide(g),
-      child: Padding(
-        padding: const EdgeInsets.all(22),
+
+  Widget guideCard(Guide g) {
+    final color = switch (g.category) {
+      'İletişim' => const Color(0xff364f69),
+      'Enerji' => const Color(0xff695436),
+      'Dijital hazırlık' => const Color(0xff414866),
+      _ => const Color(0xff466152),
+    };
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(9),
+        onTap: () => showGuide(g),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xffedf0e1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(categoryIcon(g.category), color: ink, size: 24),
-                ),
-                const Spacer(),
-                IconButton(
-                  tooltip: saved.contains(g.id)
-                      ? 'Kaydedilenlerden çıkar'
-                      : 'Rehberi kaydet',
-                  onPressed: () => toggle('saved', g.id),
-                  icon: Icon(
-                    saved.contains(g.id)
-                        ? Icons.bookmark
-                        : Icons.bookmark_border,
-                    color: ink,
+            AspectRatio(
+              aspectRatio: 1.85,
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [color, const Color(0xff252a33)],
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Text(
-              g.category.toUpperCase(),
-              style: const TextStyle(
-                fontSize: 10,
-                color: muted,
-                letterSpacing: 1.7,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      right: -12,
+                      bottom: -18,
+                      child: Icon(
+                        categoryIcon(g.category),
+                        size: 135,
+                        color: Colors.white.withValues(alpha: 0.06),
+                      ),
+                    ),
+                    Positioned(
+                      left: 17,
+                      top: 18,
+                      child: Icon(
+                        categoryIcon(g.category),
+                        size: 33,
+                        color: Colors.white.withValues(alpha: 0.85),
+                      ),
+                    ),
+                    Positioned(
+                      right: 3,
+                      top: 3,
+                      child: IconButton(
+                        tooltip: saved.contains(g.id)
+                            ? 'Kaydedilenlerden çıkar'
+                            : 'Rehberi kaydet',
+                        onPressed: () => toggle('saved', g.id),
+                        icon: Icon(
+                          saved.contains(g.id)
+                              ? Icons.bookmark
+                              : Icons.bookmark_border,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 14,
+                      bottom: 12,
+                      child: Text(
+                        g.category,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 10,
+                      bottom: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.article_outlined,
+                              size: 11,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${(g.body.split(RegExp(r'\s+')).length / 180).ceil()} dk',
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             Text(
               g.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
+                height: 1.35,
                 color: ink,
               ),
             ),
-            const SizedBox(height: 9),
+            const SizedBox(height: 5),
             Text(
               g.summary,
-              style: const TextStyle(fontSize: 13, color: muted, height: 1.65),
-            ),
-            const SizedBox(height: 20),
-            const Row(
-              children: [
-                Icon(Icons.offline_pin_outlined, size: 14, color: muted),
-                SizedBox(width: 6),
-                Text('Cihazında', style: TextStyle(fontSize: 11, color: muted)),
-                Spacer(),
-                Icon(Icons.arrow_forward, size: 19, color: ink),
-              ],
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 12, color: muted, height: 1.45),
             ),
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
+
   Widget checklist() => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -872,7 +926,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       for (final t in tasks)
         Card(
           elevation: 0,
-          color: const Color(0xfffffef9),
+          color: panel,
           margin: const EdgeInsets.only(bottom: 10),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -910,7 +964,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         width: double.infinity,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: panel,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: line),
         ),

@@ -4,8 +4,9 @@
 
 Türkçe, açık kaynak, çevrimdışı hazırlık ve yaşam kütüphanesi. Flutter ile Android, iOS, macOS, Windows ve Linux hedeflenir. GitHub Pages üzerindeki web sürümü arayüz önizlemesidir; tam çevrimdışı web uygulaması değildir.
 
-## v0.1.0 — çalışan başlangıç
+## v0.1.1 — çalışan başlangıç
 
+- Koyu masaüstü arayüzü, kompakt sol menü ve konu bazında rehber kartları.
 - Uygulamayla gelen 6 özgün genel hazırlık rehberi; internet bağlantısı gerekmez.
 - Türkçe karakterlere toleranslı arama, kategori filtreleri ve kaydedilenler.
 - Cihazda saklanan hazırlık kontrol listesi.
