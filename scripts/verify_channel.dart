@@ -2,8 +2,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import '../lib/services/updates.dart';
-import '../lib/data/models.dart';
+import 'package:azik/services/updates.dart';
+import 'package:azik/data/models.dart';
 
 Future<void> main() async {
   final config = jsonDecode(
@@ -18,7 +18,7 @@ Future<void> main() async {
     final update = await service.check(0);
     if (update == null) throw StateError('No published pack');
     final pack = ContentPack.parse(await service.download(update));
-    print(
+    stdout.writeln(
       'Verified live GitHub catalog signature and release SHA-256: v${pack.version}, ${pack.guides.length} guides.',
     );
   } finally {
