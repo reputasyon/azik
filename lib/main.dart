@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/models.dart';
 import 'data/store.dart';
+import 'data/store_base.dart';
 import 'services/updates.dart';
 
 const ink = Color(0xff203b30);
@@ -18,7 +19,7 @@ void main() {
 }
 
 class AzikApp extends StatelessWidget {
-  final ContentStore? store;
+  final LibraryStore? store;
   const AzikApp({super.key, this.store});
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -52,7 +53,7 @@ class AzikApp extends StatelessWidget {
 }
 
 class LibraryScreen extends StatefulWidget {
-  final ContentStore? store;
+  final LibraryStore? store;
   const LibraryScreen({super.key, this.store});
   @override
   State<LibraryScreen> createState() => _LibraryScreenState();
@@ -117,10 +118,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Future<void> load() async {
     try {
       await store.open();
-      if (await store.version() == 0)
+      if (await store.version() == 0) {
         await store.install(
           await rootBundle.loadString('assets/content/temel.json'),
         );
+      }
       final p = await SharedPreferences.getInstance();
       final list = await store.guides();
       final v = await store.version();
@@ -135,11 +137,12 @@ class _LibraryScreenState extends State<LibraryScreen> {
         error = '';
       });
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           loading = false;
           error = 'Kütüphane açılamadı. Depolama alanını kontrol edip yeniden dene.';
         });
+      }
     }
   }
 
@@ -148,9 +151,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
     final next = {...current};
     next.contains(id) ? next.remove(id) : next.add(id);
     try {
-      if (!await prefs!.setStringList(key, next.toList()))
+      if (!await prefs!.setStringList(key, next.toList())) {
         throw StateError('save');
-      if (mounted)
+      }
+      if (mounted) {
         setState(() {
           if (key == 'saved') {
             saved = next;
@@ -158,13 +162,15 @@ class _LibraryScreenState extends State<LibraryScreen> {
             checked = next;
           }
         });
+      }
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Değişiklik kaydedilemedi. Yeniden dene.'),
           ),
         );
+      }
     }
   }
 
@@ -176,25 +182,28 @@ class _LibraryScreenState extends State<LibraryScreen> {
     });
     try {
       final result = await updates.check(version);
-      if (mounted)
+      if (mounted) {
         setState(() {
           available = result;
           updateMessage = result == null
               ? 'İndirilebilir daha yeni bir içerik paketi yok.'
               : 'Temel kütüphane v${result.version} hazır. ${(result.size / 1024).ceil()} KB indirilecek.';
         });
+      }
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           updateMessage = e is UpdateFailure
               ? e.message
               : 'Kontrol tamamlanamadı. Bağlantını kontrol edip yeniden dene.';
         });
+      }
     } finally {
-      if (mounted)
+      if (mounted) {
         setState(() {
           busy = false;
         });
+      }
     }
   }
 
@@ -209,7 +218,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       await store.install(await updates.download(update));
       final list = await store.guides();
       final v = await store.version();
-      if (mounted)
+      if (mounted) {
         setState(() {
           guides = list;
           version = v;
@@ -218,18 +227,21 @@ class _LibraryScreenState extends State<LibraryScreen> {
           updateMessage =
               'Kütüphane güncellendi. İçerikler çevrimdışı kullanıma hazır.';
         });
+      }
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           updateMessage = e is UpdateFailure
               ? e.message
               : 'Güncelleme tamamlanamadı. Mevcut kütüphane korundu.';
         });
+      }
     } finally {
-      if (mounted)
+      if (mounted) {
         setState(() {
           busy = false;
         });
+      }
     }
   }
 
@@ -323,9 +335,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (loading)
+    if (loading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    if (error.isNotEmpty)
+    }
+    if (error.isNotEmpty) {
       return Scaffold(
         body: Center(
           child: Column(
@@ -337,6 +350,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ),
         ),
       );
+    }
     final wide = MediaQuery.sizeOf(context).width >= 900;
     return Scaffold(
       body: SafeArea(

@@ -33,8 +33,9 @@ class Guide {
     }
 
     final id = field('id');
-    if (!RegExp(r'^[a-z0-9-]{1,80}$').hasMatch(id))
+    if (!RegExp(r'^[a-z0-9-]{1,80}$').hasMatch(id)) {
       throw const FormatException('Geçersiz rehber kimliği');
+    }
     return Guide(
       id: id,
       title: field('title'),
@@ -74,13 +75,15 @@ class ContentPack {
       throw const FormatException('Desteklenmeyen içerik paketi');
     }
     final rows = j['guides'];
-    if (rows is! List || rows.isEmpty || rows.length > 10000)
+    if (rows is! List || rows.isEmpty || rows.length > 10000) {
       throw const FormatException('Geçersiz rehber listesi');
+    }
     final guides = rows
         .map((r) => Guide.fromJson(r as Map<String, dynamic>))
         .toList();
-    if (guides.map((g) => g.id).toSet().length != guides.length)
+    if (guides.map((g) => g.id).toSet().length != guides.length) {
       throw const FormatException('Yinelenen rehber kimliği');
+    }
     return ContentPack(j['version'] as int, guides);
   }
 }

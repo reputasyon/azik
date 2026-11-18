@@ -36,24 +36,28 @@ class UpdateService {
     final response = await client
         .send(http.Request('GET', uri))
         .timeout(const Duration(seconds: 20));
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       throw const UpdateFailure('Dosya alınamadı. Daha sonra yeniden dene.');
-    if ((response.contentLength ?? 0) > limit)
+    }
+    if ((response.contentLength ?? 0) > limit) {
       throw const UpdateFailure('Dosya boyutu sınırı aşıldı.');
+    }
     final bytes = <int>[];
     await for (final chunk in response.stream.timeout(
       const Duration(seconds: 20),
     )) {
       bytes.addAll(chunk);
-      if (bytes.length > limit)
+      if (bytes.length > limit) {
         throw const UpdateFailure('Dosya boyutu sınırı aşıldı.');
+      }
     }
     return bytes;
   }
 
   Future<PackUpdate?> check(int installedVersion) async {
-    if (!configured)
+    if (!configured) {
       throw const UpdateFailure('GitHub yayın kanalı henüz yapılandırılmadı.');
+    }
     final catalog = Uri.parse(catalogUrl);
     if (catalog.scheme != 'https' ||
         !catalog.host.endsWith('.github.io') ||
@@ -77,10 +81,11 @@ class UpdateService {
         ),
       ),
     );
-    if (!valid)
+    if (!valid) {
       throw const UpdateFailure(
         'Güncelleme imzası doğrulanamadı. Mevcut içerik korundu.',
       );
+    }
     final j = jsonDecode(utf8.decode(payload)) as Map<String, dynamic>;
     if (j['schema'] != 1 ||
         j['id'] != 'temel' ||
@@ -122,13 +127,15 @@ class UpdateService {
     final digest = (await Sha256().hash(bytes)).bytes
         .map((b) => b.toRadixString(16).padLeft(2, '0'))
         .join();
-    if (bytes.length != update.size || digest != update.digest)
+    if (bytes.length != update.size || digest != update.digest) {
       throw const UpdateFailure(
         'Dosya bütünlüğü doğrulanamadı. Mevcut içerik korundu.',
       );
+    }
     final text = utf8.decode(bytes);
-    if (ContentPack.parse(text).version != update.version)
+    if (ContentPack.parse(text).version != update.version) {
       throw const UpdateFailure('Paket sürümü katalogla eşleşmiyor.');
+    }
     return text;
   }
 
